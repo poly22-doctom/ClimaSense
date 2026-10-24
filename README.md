@@ -47,11 +47,11 @@ Desenvolver uma solução acessível de monitoramento meteorológico e ambiental
 
 👩‍💻 Desenvolvido por
 
-Bianca 
-Emanuelly 
-Joab
-Polianny Santos 
-Pedro
+- Bianca 
+- Emanuelly 
+- Joab
+- Polianny Santos 
+- Pedro
 
 Projeto acadêmico de tecnologia, IoT e monitoramento ambiental.
 
