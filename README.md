@@ -130,8 +130,9 @@ python -m pytest -q
 - Polianny Santos
 - Pedro
 
-<img width="603" height="270" alt="image" src="https://github.com/user-attachments/assets/ed8a1d92-3b4a-461e-a0e8-d030c258701d" />
-
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/ed8a1d92-3b4a-461e-a0e8-d030c258701d" alt="ClimaSense - dados ambientais ao alcance de todos" width="100%">
+</p>
 
 Projeto acadêmico de tecnologia, IoT e monitoramento ambiental.
 Projeto acadêmico de tecnologia, IoT e monitoramento ambiental.
