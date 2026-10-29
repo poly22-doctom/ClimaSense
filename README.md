@@ -131,7 +131,7 @@ python -m pytest -q
 - Pedro
 
 <p align="center">
-  <img src="https://github.com/user-attachments/assets/ed8a1d92-3b4a-461e-a0e8-d030c258701d" alt="ClimaSense - dados ambientais ao alcance de todos" width="100%">
+  <img src="https://github.com/user-attachments/assets/ed8a1d92-3b4a-461e-a0e8-d030c258701d" alt="ClimaSense - dados ambientais ao alcance de todos" width="8%">
 </p>
 
 Projeto acadêmico de tecnologia, IoT e monitoramento ambiental.
