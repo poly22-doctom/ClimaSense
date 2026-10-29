@@ -44,6 +44,19 @@ O desenvolvimento do dashboard pode ocorrer antes da montagem do hardware, utili
 
 Desenvolver uma solução acessível de monitoramento meteorológico e ambiental, integrando Internet das Coisas (IoT), desenvolvimento web e visualização de dados.
 
+Como Executar:
+
+```powershell
+uvicorn app.main:app --reload --port 8000
+```
+
+- Painel: <http://localhost:8000>
+- Swagger (documentação da API): <http://localhost:8000/docs> (carrega seus scripts de uma CDN, então precisa de internet)
+
+## Testes
+
+```powershell
+python -m pytest -q
 
 👩‍💻 Desenvolvido por
 
