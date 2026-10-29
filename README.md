@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://github.com/user-attachments/assets/ed8a1d92-3b4a-461e-a0e8-d030c258701d" alt="ClimaSense" width="100%">
+  <img src="https://github.com/user-attachments/assets/ed8a1d92-3b4a-461e-a0e8-d030c258701d" alt="ClimaSense" width="80%">
 </p>
 
 <h1 align="center">🌱 ClimaSense</h1>
