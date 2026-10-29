@@ -1,4 +1,22 @@
-✨ *ClimaSense* ✨ 
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/ed8a1d92-3b4a-461e-a0e8-d030c258701d" alt="ClimaSense" width="100%">
+</p>
+
+<h1 align="center">🌱 ClimaSense</h1>
+
+<p align="center">
+  <b>Monitoramento Meteorológico e Ambiental com IoT</b><br>
+  <i>Dados ambientais ao alcance de todos 🌎</i>
+</p>
+
+<p align="center">
+  <img src="https://img.shields.io/badge/Python-3.11+-2F7A5E?style=for-the-badge&logo=python&logoColor=white" alt="Python">
+  <img src="https://img.shields.io/badge/FastAPI-API-7C5CC4?style=for-the-badge&logo=fastapi&logoColor=white" alt="FastAPI">
+  <img src="https://img.shields.io/badge/ESP32-IoT-2F7A5E?style=for-the-badge&logo=espressif&logoColor=white" alt="ESP32">
+  <img src="https://img.shields.io/badge/Projeto-Acadêmico-7C5CC4?style=for-the-badge" alt="Projeto acadêmico">
+</p>
+
+---
 
 Monitoramento Meteorológico e Ambiental com IoT
 
