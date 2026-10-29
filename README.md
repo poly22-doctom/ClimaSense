@@ -1,4 +1,4 @@
-ClimaSense
+✨ *ClimaSense* ✨ 
 
 Monitoramento Meteorológico e Ambiental com IoT
 
