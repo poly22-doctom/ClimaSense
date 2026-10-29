@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{{ station_name }}</title>
+  <meta name="description" content="Condições do tempo e do ambiente medidas por uma estação com ESP32, com gráficos e histórico.">
+  <link rel="icon" href="/static/img/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+<a class="skip" href="#principal">Ir para o conteúdo</a>
+
+<svg class="sprite" width="0" height="0" aria-hidden="true" focusable="false">
+  <symbol id="i-thermo" viewBox="0 0 24 24"><path d="M14 14.8V5a2 2 0 0 0-4 0v9.8a4 4 0 1 0 4 0Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><circle cx="12" cy="17.5" r="1.8" fill="currentColor"/></symbol>
+  <symbol id="i-drop" viewBox="0 0 24 24"><path d="M12 3.5s6 6.2 6 10.5a6 6 0 0 1-12 0C6 9.700 12 3.500 12 3.500Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></symbol>
+  <symbol id="i-gauge" viewBox="0 0 24 24"><path d="M4 16a8 8 0 1 1 16 0" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="m12 16 4-5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><circle cx="12" cy="16" r="1.6" fill="currentColor"/></symbol>
+  <symbol id="i-air" viewBox="0 0 24 24"><path d="M3 9h10a2.500 2.500 0 1 0-2.500-2.500M3 14h14a2.500 2.500 0 1 1-2.500 2.500M3 19h7" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></symbol>
+  <symbol id="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M12 2.500v2.500M12 19v2.500M2.500 12H5M19 12h2.500M5.300 5.300l1.800 1.800M16.900 16.900l1.800 1.800M5.300 18.700l1.800-1.800M16.900 7.100l1.800-1.800" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></symbol>
+  <symbol id="i-overview" viewBox="0 0 24 24"><rect x="3.500" y="3.500" width="7" height="7" rx="2" fill="none" stroke="currentColor" stroke-width="1.8"/><rect x="13.500" y="3.500" width="7" height="7" rx="2" fill="none" stroke="currentColor" stroke-width="1.8"/><rect x="3.500" y="13.500" width="7" height="7" rx="2" fill="none" stroke="currentColor" stroke-width="1.8"/><rect x="13.500" y="13.500" width="7" height="7" rx="2" fill="none" stroke="currentColor" stroke-width="1.8"/></symbol>
+  <symbol id="i-history" viewBox="0 0 24 24"><path d="M3.500 12a8.500 8.500 0 1 0 2.600-6.100M3.500 4.500v4h4M12 7.500V12l3 2" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="i-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.500" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M12 11v5.500M12 7.700v.1" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></symbol>
+  <symbol id="i-up" viewBox="0 0 24 24"><path d="M12 19V5m0 0-6 6m6-6 6 6" fill="none" stroke="currentColor" stroke-width="2.200" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="i-down" viewBox="0 0 24 24"><path d="M12 5v14m0 0-6-6m6 6 6-6" fill="none" stroke="currentColor" stroke-width="2.200" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="i-flat" viewBox="0 0 24 24"><path d="M5 12h14m0 0-5-5m5 5-5 5" fill="none" stroke="currentColor" stroke-width="2.200" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="i-none" viewBox="0 0 24 24"><path d="M6 12h12" stroke="currentColor" stroke-width="2.200" stroke-linecap="round"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24"><path d="m5 12.500 4.500 4.500L19 7.500" fill="none" stroke="currentColor" stroke-width="2.200" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="i-warn" viewBox="0 0 24 24"><path d="M12 3.500 22 20H2L12 3.500Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M12 10v4.500M12 17.200v.1" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></symbol>
+</svg>
+
+<nav class="rail" aria-label="Seções da página">
+  <a class="rail-logo" href="#visao-geral" aria-label="Início"><span class="logo-mark" aria-hidden="true"></span></a>
+  <a class="rail-link" href="#visao-geral"><svg aria-hidden="true"><use href="#i-overview"/></svg><span>Visão geral</span></a>
+  <a class="rail-link" href="#historico"><svg aria-hidden="true"><use href="#i-history"/></svg><span>Histórico</span></a>
+  <a class="rail-link" href="#sobre"><svg aria-hidden="true"><use href="#i-info"/></svg><span>Sobre</span></a>
+</nav>
+
+<div class="page">
+  <header class="top" id="visao-geral">
+    <div class="top-text">
+      <h1>Estação Meteorológica e Ambiental</h1>
+      <p class="station-line"><strong id="station-name">Estação</strong> — <span id="station-location">…</span></p>
+    </div>
+    <div class="top-status">
+      <span class="chip" id="conn-chip" data-state="loading"><span class="dot" aria-hidden="true"></span><span id="conn-text">Verificando conexão…</span></span>
+      <p class="updated">Última atualização: <time id="last-updated">—</time></p>
+      <div class="segmented" id="source-switch" role="group" aria-label="Origem dos dados exibidos" hidden>
+        <button type="button" data-source="hardware" aria-pressed="false">Dados reais</button>
+        <button type="button" data-source="simulated" aria-pressed="false">Demonstração</button>
+      </div>
+    </div>
+  </header>
+
+  <div class="banner banner-demo" id="demo-banner" hidden role="status">
+    <strong>DEMONSTRAÇÃO.</strong> Estes valores são simulados por computador para testar o painel. Não são medições reais do tempo.
+  </div>
+  <div class="banner banner-error" id="error-banner" hidden role="alert"></div>
+  <div class="banner banner-wait" id="wait-banner" hidden role="status">
+    <strong>Aguardando a primeira leitura.</strong> A estação ainda não enviou dados. Assim que enviar, os valores aparecem aqui.
+  </div>
+
+  <main id="principal">
+    <section aria-labelledby="h-agora">
+      <h2 id="h-agora">Condições agora</h2>
+      <div class="cards">
+        <article class="card metric m-temp" data-metric="temperature_c">
+          <div class="ring"><svg aria-hidden="true"><use href="#i-thermo"/></svg></div>
+          <div class="metric-body">
+            <h3>Temperatura do ar</h3>
+            <p class="value"><span class="num" data-role="value">…</span> <span class="unit">°C</span></p>
+            <p class="meta"><span data-role="note">Sensor DHT22</span></p>
+            <p class="trend" data-role="trend"></p>
+            <p class="when">Medido: <time data-role="when">—</time></p>
+          </div>
+        </article>
+        <article class="card metric m-hum" data-metric="humidity_pct">
+          <div class="ring"><svg aria-hidden="true"><use href="#i-drop"/></svg></div>
+          <div class="metric-body">
+            <h3>Umidade relativa</h3>
+            <p class="value"><span class="num" data-role="value">…</span> <span class="unit">%</span></p>
+            <p class="meta"><span data-role="note">Sensor DHT22</span></p>
+            <p class="trend" data-role="trend"></p>
+            <p class="when">Medido: <time data-role="when">—</time></p>
+          </div>
+        </article>
+        <article class="card metric m-press" data-metric="pressure_hpa">
+          <div class="ring"><svg aria-hidden="true"><use href="#i-gauge"/></svg></div>
+          <div class="metric-body">
+            <h3>Pressão atmosférica</h3>
+            <p class="value"><span class="num" data-role="value">…</span> <span class="unit">hPa</span></p>
+            <p class="meta"><span data-role="note">Sensor BMP280</span></p>
+            <p class="trend" data-role="trend"></p>
+            <p class="when">Medido: <time data-role="when">—</time></p>
+          </div>
+        </article>
+        <article class="card metric m-gas" data-metric="mq135_raw">
+          <div class="ring"><svg aria-hidden="true"><use href="#i-air"/></svg></div>
+          <div class="metric-body">
+            <h3>Sinal do sensor de gases</h3>
+            <p class="value"><span class="num" data-role="value">…</span> <span class="unit">pontos (0–4095)</span></p>
+            <p class="meta"><span data-role="note">MQ-135, sem calibração. Não é índice oficial de qualidade do ar.</span></p>
+            <p class="trend" data-role="trend"></p>
+            <p class="when">Medido: <time data-role="when">—</time></p>
+          </div>
+        </article>
+        <article class="card metric m-light" data-metric="ldr_raw">
+          <div class="ring"><svg aria-hidden="true"><use href="#i-sun"/></svg></div>
+          <div class="metric-body">
+            <h3>Luminosidade relativa</h3>
+            <p class="value"><span class="num" data-role="value">…</span> <span class="unit">% da escala</span></p>
+            <p class="meta"><span data-role="note">Sensor LDR, valor relativo (não é lux)</span></p>
+            <p class="trend" data-role="trend"></p>
+            <p class="when">Medido: <time data-role="when">—</time></p>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <div class="two-col">
+      <section class="card" aria-labelledby="h-alertas">
+        <h2 id="h-alertas">Alertas ambientais</h2>
+        <p class="hint">Alerta <strong>medido</strong> = fato observado pelo sensor. Alerta <strong>estimado</strong> = interpretação, que pode estar errada.</p>
+        <ul class="alerts" id="alerts-list" aria-live="polite"><li class="empty">Carregando alertas…</li></ul>
+      </section>
+      <section class="card" aria-labelledby="h-resumo">
+        <div class="card-head">
+          <h2 id="h-resumo">Resumo do período</h2>
+        </div>
+        <p class="hint" id="stats-hint">Mínimo, média e máximo dos registros disponíveis.</p>
+        <div class="stats" id="stats-list"><p class="empty">Carregando…</p></div>
+      </section>
+    </div>
+
+    <section aria-labelledby="h-graficos">
+      <div class="section-head">
+        <h2 id="h-graficos">Gráficos</h2>
+        <div class="segmented" id="period-switch" role="group" aria-label="Período dos gráficos">
+          <button type="button" data-period="24h" aria-pressed="true">Últimas 24 horas</button>
+          <button type="button" data-period="7d" aria-pressed="false">Últimos 7 dias</button>
+          <button type="button" data-period="30d" aria-pressed="false">Últimos 30 dias</button>
+        </div>
+      </div>
+      <div class="charts">
+        <figure class="card chart-card" data-chart="temperature_c">
+          <figcaption>Temperatura do ar (°C)</figcaption>
+          <div class="chart-box"><canvas role="img" aria-label="Gráfico da temperatura do ar ao longo do tempo"></canvas><p class="chart-empty" hidden></p></div>
+          <p class="sr-summary" aria-live="polite"></p>
+        </figure>
+        <figure class="card chart-card" data-chart="humidity_pct">
+          <figcaption>Umidade relativa (%)</figcaption>
+          <div class="chart-box"><canvas role="img" aria-label="Gráfico da umidade relativa ao longo do tempo"></canvas><p class="chart-empty" hidden></p></div>
+          <p class="sr-summary" aria-live="polite"></p>
+        </figure>
+        <figure class="card chart-card" data-chart="pressure_hpa">
+          <figcaption>Pressão atmosférica (hPa)</figcaption>
+          <div class="chart-box"><canvas role="img" aria-label="Gráfico da pressão atmosférica ao longo do tempo"></canvas><p class="chart-empty" hidden></p></div>
+          <p class="sr-summary" aria-live="polite"></p>
+        </figure>
+        <figure class="card chart-card" data-chart="mq135_raw">
+          <figcaption>Sinal do sensor de gases MQ-135 (pontos, 0–4095)</figcaption>
+          <div class="chart-box"><canvas role="img" aria-label="Gráfico do sinal do sensor de gases ao longo do tempo"></canvas><p class="chart-empty" hidden></p></div>
+          <p class="sr-summary" aria-live="polite"></p>
+        </figure>
+        <figure class="card chart-card wide" data-chart="ldr_raw">
+          <figcaption>Luminosidade relativa (% da escala do sensor)</figcaption>
+          <div class="chart-box"><canvas role="img" aria-label="Gráfico da luminosidade relativa ao longo do tempo"></canvas><p class="chart-empty" hidden></p></div>
+          <p class="sr-summary" aria-live="polite"></p>
+        </figure>
+      </div>
+    </section>
+
+    <section class="card" id="historico" aria-labelledby="h-hist">
+      <h2 id="h-hist">Histórico de medições</h2>
+      <form class="filters" id="hist-filters">
+        <label>Período
+          <select id="f-period">
+            <option value="24h">Últimas 24 horas</option>
+            <option value="7d">Últimos 7 dias</option>
+            <option value="30d">Últimos 30 dias</option>
+            <option value="custom">Datas específicas</option>
+          </select>
+        </label>
+        <label class="f-custom" hidden>De <input type="date" id="f-start"></label>
+        <label class="f-custom" hidden>Até <input type="date" id="f-end"></label>
+        <label>Origem
+          <select id="f-source">
+            <option value="current">Conforme a tela</option>
+            <option value="hardware">Somente reais</option>
+            <option value="simulated">Somente simulados</option>
+            <option value="all">Todos</option>
+          </select>
+        </label>
+        <label>Ordenar por
+          <select id="f-sort">
+            <option value="timestamp">Data e horário</option>
+            <option value="temperature_c">Temperatura</option>
+            <option value="humidity_pct">Umidade</option>
+            <option value="pressure_hpa">Pressão</option>
+            <option value="mq135_raw">MQ-135</option>
+            <option value="ldr_raw">LDR</option>
+          </select>
+        </label>
+        <label>Ordem
+          <select id="f-order"><option value="desc">Maior/mais recente primeiro</option><option value="asc">Menor/mais antigo primeiro</option></select>
+        </label>
+        <label>Por página
+          <select id="f-size"><option>10</option><option selected>25</option><option>50</option></select>
+        </label>
+      </form>
+      <p class="form-error" id="hist-error" role="alert" hidden></p>
+      <div class="table-wrap">
+        <table id="hist-table">
+          <caption class="sr-only">Medições registradas pela estação</caption>
+          <thead>
+            <tr>
+              <th scope="col" data-sort="timestamp">Data e horário</th>
+              <th scope="col" data-sort="temperature_c">Temperatura (°C)</th>
+              <th scope="col" data-sort="humidity_pct">Umidade (%)</th>
+              <th scope="col" data-sort="pressure_hpa">Pressão (hPa)</th>
+              <th scope="col" data-sort="mq135_raw">MQ-135 (pontos)</th>
+              <th scope="col" data-sort="ldr_raw">LDR (pontos)</th>
+              <th scope="col" data-sort="source">Origem</th>
+            </tr>
+          </thead>
+          <tbody id="hist-body"><tr><td colspan="7" class="empty">Carregando…</td></tr></tbody>
+        </table>
+      </div>
+      <nav class="pager" aria-label="Paginação do histórico">
+        <button type="button" id="pg-prev" class="btn">Anterior</button>
+        <span id="pg-info" aria-live="polite">—</span>
+        <button type="button" id="pg-next" class="btn">Próxima</button>
+      </nav>
+    </section>
+
+    <section id="sobre" aria-labelledby="h-sobre">
+      <h2 id="h-sobre">Sobre o projeto</h2>
+      <div class="about">
+        <article class="card">
+          <h3>O que é esta estação?</h3>
+          <p>Um projeto acadêmico que mede o ambiente com um microcontrolador ESP32 e sensores, e envia os valores pela internet para esta página. Qualquer pessoa pode consultar as condições e o histórico.</p>
+          <p>Cada medição mostra se é <strong>real</strong> (vinda da estação) ou <strong>simulada</strong> (demonstração).</p>
+        </article>
+        <article class="card">
+          <h3>Sensores e o que eles medem</h3>
+          <ul class="plain">
+            <li><strong>DHT22:</strong> temperatura do ar e umidade relativa.</li>
+            <li><strong>BMP280:</strong> pressão atmosférica. Ele <em>não</em> mede umidade; sua temperatura é auxiliar e não substitui a do DHT22.</li>
+            <li><strong>MQ-135:</strong> reage a gases ligados à qualidade do ar. Sem calibração, mostramos só o sinal bruto (0–4095). Não indica concentração exata nem índice oficial.</li>
+            <li><strong>LDR:</strong> luminosidade relativa (0–100 % da escala do sensor). Não é medida em lux.</li>
+            <li>Este conjunto <strong>não tem sensor de chuva</strong>.</li>
+          </ul>
+        </article>
+        <article class="card">
+          <h3>Limites dos alertas</h3>
+          <p class="hint">Valores definidos pela equipe do projeto. <strong>Não são padrões médicos, legais ou oficiais.</strong></p>
+          <ul class="plain" id="limits-list"><li>Carregando…</li></ul>
+        </article>
+        <article class="card">
+          <h3>Como ler os indicadores</h3>
+          <ul class="plain">
+            <li>A seta mostra a variação nas últimas 3 horas. Sem dados suficientes, aparece “Tendência indisponível”.</li>
+            <li>“Sem leitura” significa que o sensor falhou naquele momento. Nenhum valor é inventado.</li>
+            <li>Os gráficos podem mostrar médias por intervalo quando há muitos registros.</li>
+          </ul>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <footer class="foot">
+    <p>Projeto acadêmico. Dados do tempo e do ar desta estação são experimentais e não substituem fontes oficiais de previsão ou alerta.</p>
+  </footer>
+</div>
+
+<script src="/static/vendor/chart.umd.js"></script>
+<script src="/static/js/app.js"></script>
+</body>
+</html>
