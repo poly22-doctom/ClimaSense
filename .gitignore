@@ -1,14 +1,104 @@
+
+# Ambiente virtual
 .venv/
 venv/
+env/
+ENV/
+env.bak/
+venv.bak/
+
+# Python
 __pycache__/
-*.pyc
+*.py[codz]
+*$py.class
+*.so
+.Python
+
+# Variáveis de ambiente e segredos
 .env
 .env.*
 !.env.example
+.envrc
+
+# Banco de dados
 *.db
 *.sqlite
 *.sqlite3
+*.db-journal
+
+# Testes e cobertura
 .pytest_cache/
 .mypy_cache/
+.dmypy.json
+dmypy.json
+.pyre/
+.pytype/
+.ruff_cache/
+.coverage
+.coverage.*
+htmlcov/
+.tox/
+.nox/
+.hypothesis/
+nosetests.xml
+coverage.xml
+*.cover
+*.py.cover
+*.lcov
+.cache/
+
+# Logs e arquivos temporários
+*.log
+pip-log.txt
+pip-delete-this-directory.txt
+tempCodeRunnerFile.py
+
+# Distribuição e instalação
+build/
+dist/
+downloads/
+eggs/
+.eggs/
+*.egg-info/
+.installed.cfg
+*.egg
+wheels/
+share/python-wheels/
+MANIFEST
+
+# Ferramentas e ambientes
+.pybuilder/
+target/
+.pdm-python
+.pdm-build/
+.pixi/
+__pypackages__/
+conda-meta/
+.spyderproject
+.spyproject
+.ropeproject
+.pytest_cache/
+
+# Frameworks e aplicações
+instance/
+.webassets-cache/
+.streamlit/secrets.toml
+.abstra/
+
+# Documentação gerada
+docs/_build/
+site/
+
+# Jupyter
+.ipynb_checkpoints/
+profile_default/
+ipython_config.py
+
+# Outros
 .DS_Store
 Thumbs.db
+*.manifest
+*.spec
+.pypirc
+.idea/
+.vscode/
