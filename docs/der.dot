@@ -1,0 +1,53 @@
+digraph DER {
+  graph [rankdir=LR, bgcolor="white", pad=0.4, nodesep=0.9, ranksep=2.2, fontname="Helvetica", label="DER — ClimaSense (notação pé de galinha)", labelloc=t, fontsize=20];
+  node  [shape=plain, fontname="Helvetica", fontsize=12];
+  edge  [fontname="Helvetica", fontsize=12, dir=both, color="#4a4a6a", penwidth=1.6];
+
+  stations [label=<
+    <TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="5" COLOR="#4a4a6a">
+      <TR><TD COLSPAN="3" BGCOLOR="#8a68d8"><FONT COLOR="white"><B>stations</B> (Estação)</FONT></TD></TR>
+      <TR><TD ALIGN="LEFT"><B>PK</B></TD><TD ALIGN="LEFT"><B>id</B></TD><TD ALIGN="LEFT">INTEGER</TD></TR>
+      <TR><TD ALIGN="LEFT">UK</TD><TD ALIGN="LEFT">station_id</TD><TD ALIGN="LEFT">VARCHAR(64)</TD></TR>
+      <TR><TD></TD><TD ALIGN="LEFT">name</TD><TD ALIGN="LEFT">VARCHAR(120)</TD></TR>
+      <TR><TD></TD><TD ALIGN="LEFT">location</TD><TD ALIGN="LEFT">VARCHAR(200)</TD></TR>
+      <TR><TD></TD><TD ALIGN="LEFT">created_at</TD><TD ALIGN="LEFT">DATETIME</TD></TR>
+      <TR><TD></TD><TD ALIGN="LEFT">latitude</TD><TD ALIGN="LEFT">FLOAT (nulo)</TD></TR>
+      <TR><TD></TD><TD ALIGN="LEFT">longitude</TD><TD ALIGN="LEFT">FLOAT (nulo)</TD></TR>
+      <TR><TD></TD><TD ALIGN="LEFT">coverage_radius_km</TD><TD ALIGN="LEFT">FLOAT (nulo)</TD></TR>
+    </TABLE>>];
+
+  readings [label=<
+    <TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="5" COLOR="#4a4a6a">
+      <TR><TD COLSPAN="3" BGCOLOR="#cf5a0c"><FONT COLOR="white"><B>readings</B> (Leitura)</FONT></TD></TR>
+      <TR><TD ALIGN="LEFT"><B>PK</B></TD><TD ALIGN="LEFT"><B>id</B></TD><TD ALIGN="LEFT">INTEGER</TD></TR>
+      <TR><TD ALIGN="LEFT"><B>FK</B>, UQ*</TD><TD ALIGN="LEFT">station_id</TD><TD ALIGN="LEFT">VARCHAR(64)</TD></TR>
+      <TR><TD ALIGN="LEFT">UQ*</TD><TD ALIGN="LEFT">timestamp</TD><TD ALIGN="LEFT">DATETIME</TD></TR>
+      <TR><TD ALIGN="LEFT">UQ*</TD><TD ALIGN="LEFT">source</TD><TD ALIGN="LEFT">VARCHAR(16)</TD></TR>
+      <TR><TD></TD><TD ALIGN="LEFT">received_at</TD><TD ALIGN="LEFT">DATETIME</TD></TR>
+      <TR><TD></TD><TD ALIGN="LEFT">temperature_c</TD><TD ALIGN="LEFT">FLOAT (nulo)</TD></TR>
+      <TR><TD></TD><TD ALIGN="LEFT">humidity_pct</TD><TD ALIGN="LEFT">FLOAT (nulo)</TD></TR>
+      <TR><TD></TD><TD ALIGN="LEFT">pressure_hpa</TD><TD ALIGN="LEFT">FLOAT (nulo)</TD></TR>
+      <TR><TD></TD><TD ALIGN="LEFT">bmp280_temperature_c</TD><TD ALIGN="LEFT">FLOAT (nulo)</TD></TR>
+      <TR><TD></TD><TD ALIGN="LEFT">mq135_raw</TD><TD ALIGN="LEFT">INTEGER (nulo)</TD></TR>
+      <TR><TD></TD><TD ALIGN="LEFT">ldr_raw</TD><TD ALIGN="LEFT">INTEGER (nulo)</TD></TR>
+      <TR><TD></TD><TD ALIGN="LEFT">sensor_errors</TD><TD ALIGN="LEFT">VARCHAR(64)</TD></TR>
+      <TR><TD COLSPAN="3" ALIGN="LEFT"><FONT POINT-SIZE="10">* UQ: restrição única composta (station_id, timestamp, source)</FONT></TD></TR>
+    </TABLE>>];
+
+  alert_settings [label=<
+    <TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="5" COLOR="#4a4a6a">
+      <TR><TD COLSPAN="3" BGCOLOR="#35a56a"><FONT COLOR="white"><B>alert_settings</B> (Limites de alerta)</FONT></TD></TR>
+      <TR><TD ALIGN="LEFT"><B>PK</B></TD><TD ALIGN="LEFT"><B>id</B></TD><TD ALIGN="LEFT">INTEGER</TD></TR>
+      <TR><TD ALIGN="LEFT"><B>FK</B>, UK</TD><TD ALIGN="LEFT">station_id</TD><TD ALIGN="LEFT">VARCHAR(64)</TD></TR>
+      <TR><TD></TD><TD ALIGN="LEFT">temp_min_c</TD><TD ALIGN="LEFT">FLOAT</TD></TR>
+      <TR><TD></TD><TD ALIGN="LEFT">temp_max_c</TD><TD ALIGN="LEFT">FLOAT</TD></TR>
+      <TR><TD></TD><TD ALIGN="LEFT">humidity_min_pct</TD><TD ALIGN="LEFT">FLOAT</TD></TR>
+      <TR><TD></TD><TD ALIGN="LEFT">humidity_max_pct</TD><TD ALIGN="LEFT">FLOAT</TD></TR>
+      <TR><TD></TD><TD ALIGN="LEFT">pressure_change_hpa_3h</TD><TD ALIGN="LEFT">FLOAT</TD></TR>
+      <TR><TD></TD><TD ALIGN="LEFT">mq135_change_pct</TD><TD ALIGN="LEFT">FLOAT</TD></TR>
+      <TR><TD></TD><TD ALIGN="LEFT">offline_after_minutes</TD><TD ALIGN="LEFT">INTEGER</TD></TR>
+    </TABLE>>];
+
+  stations -> readings       [label="  registra  \n  (1 : N)  ", arrowtail=teetee, arrowhead=crowodot];
+  stations -> alert_settings [label="  possui  \n  (1 : 0..1)  ", arrowtail=teetee, arrowhead=teeodot];
+}
